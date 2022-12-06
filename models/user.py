@@ -1,11 +1,10 @@
 #!/usr/bin/python3
 """ holds class User"""
-import models
-from models.base_model import BaseModel, Base
-from os import getenv
-import sqlalchemy
+from hashlib import md5
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+import models
+from models.base_model import BaseModel, Base
 
 
 class User(BaseModel, Base):
@@ -16,8 +15,10 @@ class User(BaseModel, Base):
         password = Column(String(128), nullable=False)
         first_name = Column(String(128), nullable=True)
         last_name = Column(String(128), nullable=True)
-        places = relationship("Place", backref="user")
-        reviews = relationship("Review", backref="user")
+        places = relationship("Place", backref="user", cascade="delete, all")
+        reviews = relationship(
+            "Review", backref="user", cascade="delete, all"
+        )
     else:
         email = ""
         password = ""
